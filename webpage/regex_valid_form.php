@@ -1,24 +1,25 @@
 <?php
-
-	$pattern="";
-	$text="";
-	$replaceText="";
-	$replacedText="";
-
-	$match="Not checked yet.";
+	$text1="";
+	$text2="";
+	$email="";
+	$phone="";
+	$found="Not entered yet";
 
 if ($_SERVER["REQUEST_METHOD"]=="POST") {
-	$pattern=$_POST["pattern"];
-	$text=$_POST["text"];
-	$replaceText=$_POST["replaceText"];
-
-	$replacedText=preg_replace($pattern, $replaceText, $text);
-
-	if(preg_match($pattern, $text)) {
-						$match="Match!";
-					} else {
-						$match="Does not match!";
-					}
+	$text1=$_POST["text1"];
+	$text2=$_POST["text2"];
+	if(preg_match("/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/", $text1)){
+		$email = "In your text an email was detected";
+	}
+	if(preg_match("/\+998-[0-9]{2}-[0-9]{3}-[0-9]{4}/", $text1)){
+		$phone = "In your text a phone number was detected";
+	}
+	if(preg_match("/".$text2."/", $text1)){
+		$found="Ur string is found inside of the text you entered";
+	}
+	else{
+		$found="Ur string wasn't found inside of the text you entered";
+	}
 }
 
 ?>
@@ -33,20 +34,17 @@ if ($_SERVER["REQUEST_METHOD"]=="POST") {
 <body>
 	<form action="regex_valid_form.php" method="post">
 		<dl>
-			<dt>Pattern</dt>
-			<dd><input type="text" name="pattern" value="<?= $pattern ?>"></dd>
+			<dt>Ur Text</dt>
+			<dd><input type="text" name="text1" value="<?= $text1 ?>"></dd>
 
-			<dt>Text</dt>
-			<dd><input type="text" name="text" value="<?= $text ?>"></dd>
+			<dt>String to search</dt>
+			<dd><input type="text" name="text2" value="<?= $text2 ?>"></dd>
 
-			<dt>Replace Text</dt>
-			<dd><input type="text" name="replaceText" value="<?= $replaceText ?>"></dd>
+			<dd><?=	$found ?></dd>
 
-			<dt>Output Text</dt>
-			<dd><?=	$match ?></dd>
+			<dd><?= $email ?></dd>
 
-			<dt>Replaced Text</dt>
-			<dd> <code><?=	$replacedText ?></code></dd>
+			<dd><?= $phone ?></dd>
 
 			<dt>&nbsp;</dt>
 			<dd><input type="submit" value="Check"></dd>
